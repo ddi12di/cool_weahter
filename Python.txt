@@ -9,6 +9,8 @@ pwd тек путь
 cd изменение пути 
 
 pip freeze > requirements.txt   выгрузка аккутальных версий
+pip install --upgrade pip
+
 pip install -r requirements.txt загрузка актуальный версий из файла
  
 python -m venv venv   создание venv

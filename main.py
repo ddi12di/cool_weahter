@@ -51,20 +51,21 @@ def get_name(message: Message) -> None:
     if message.text.isalpha():
         with bot.retrieve_data(message.from_user.id, message.chat.id) as data:
             city_id = search_id(message.text)
-            data['city'] = search_id(message.text)
+            print(city_id)
 
+            if city_id is None:
+                bot.send_message(message.from_user.id, 'Попробуй еще раз, город не найден ')
+            else:
+                data['city'] = search_id(message.text)
+                text = f'Температура в вашем городе : \n' \
+                        f'Город - {Weather(city_id).city}\n ' \
+                        f'Температура - {Weather(city_id).temp}\n ' \
+                       f'Ощущается температура - {Weather(city_id).feels_like}\n ' \
+                       f'И для самых чувствительный-ДАВЛЕНИЕ- {Weather(city_id).pressure}\n ' \
+                       f'Введите город: \n '
 
-
-
-            text = f'Температура в вашем городе : \n' \
-                   f'Город - {data["city"]}\n ' \
-                    f'Город - {Weather(city_id).city}\n ' \
-                    f'Температура - {Weather(city_id).temp}\n ' \
-                   f'Ощущается температура - {Weather(city_id).feels_like}\n ' \
-                   f'И для самых чувствительный-ДАВЛЕНИЕ- {Weather(city_id).pressure}\n '
-
-        bot.send_message(message.from_user.id, text)
-        bot.set_state(UserInfo.сurrent_weather, message.chat.id)
+                bot.send_message(message.from_user.id, text)
+                bot.set_state(UserInfo.сurrent_weather, message.chat.id)
         # bot.delete_state(message.from_user.id, message.chat.id)
 
     else:
