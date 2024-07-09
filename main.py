@@ -1,8 +1,9 @@
 import os
+from datetime import datetime
 from config.config import DEFAULT_COMMANDS
 from typing import List
 
-from db.db import create_models, User
+from db.db import create_models, Request
 
 from peewee import IntegrityError
 
@@ -13,6 +14,7 @@ from telebot.custom_filters import StateFilter
 from search import search
 from search.search import search_id
 from response_api.response import Weather
+
 
 
 class UserInfo(StatesGroup):
@@ -58,13 +60,6 @@ def get_name(message: Message) -> None:
             if city_id is None:
                 bot.send_message(message.from_user.id, 'Попробуй еще раз, город не найден ')
             else:
-                user = User.create(
-                    username = message.from_user.username,
-                    firstname = message.from_user.first_name,
-                    city = city_id
-
-                )
-                user.save()
                 data['city'] = search_id(message.text)
                 text= (
                     f'Повелитель {data["name"]}\n ' \
@@ -74,6 +69,16 @@ def get_name(message: Message) -> None:
                     f'   Ощущается температура - {Weather(city_id).feels_like}\n '\
                     f'   И для самых чувствительный-ДАВЛЕНИЕ- {Weather(city_id).pressure}\n '
                        )
+                req = Request.create(
+                    username = message.from_user.username,
+                    firstname = message.from_user.first_name,
+                    city = Weather(city_id).city,
+                    temp = Weather(city_id).temp,
+                    date = datetime.now().date(),
+                    time = datetime.now().time()
+
+                )
+                req.save()
 
                 bot.send_message(message.from_user.id, text)
                 bot.set_state(UserInfo.сurrent_weather, message.chat.id)
