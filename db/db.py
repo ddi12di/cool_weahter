@@ -26,11 +26,16 @@ class BaseModel(Model):
         database = db
 
 
-class User(BaseModel):
-    user_id = IntegerField(primary_key=True)
+class Request(BaseModel):
+    request_id = IntegerField(primary_key=True)
+    date = CharField()
+    time = CharField()
     username = CharField()
-    first_name = CharField()
-    last_name = CharField(null=True)
+    firstname = CharField()
+    city = CharField()
+    temp = CharField()
+
+
 
 
 
