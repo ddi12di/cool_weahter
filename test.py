@@ -1,3 +1,0 @@
-s = 'asdSDAdsf'.
-
-print(s)
