@@ -10,10 +10,11 @@ load_dotenv()
 
 URL = os.getenv('URL')
 URL_OTHER = os.getenv('URL_OTHER')
+TOKEN = os.getenv('TOKEN')
 
 
 def Weather(key: int) -> dict:
-    response = requests.post(URL + f"{key}" + URL_OTHER)
+    response = requests.post(URL + f"{key}" + "&appid="+ TOKEN + URL_OTHER)
 
     all_response = response.json()
     temp = all_response['main']['temp']
@@ -36,4 +37,3 @@ def Weather(key: int) -> dict:
 
 
 
-#https://api.openweathermap.org/data/2.5/weather?id=e718de38b0365585db9479332f71e3ec&appid={id_city}&units=metric&lang=ru

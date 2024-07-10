@@ -5,18 +5,15 @@ from peewee import (
     AutoField,
     BooleanField,
     CharField,
-    DateField,
-    ForeignKeyField,
     IntegerField,
     Model,
     SqliteDatabase,
 )
 
-from dotenv import load_dotenv
-DB_PATH = os.getenv('DB_PATH')
-DATE_FORMAT = os.getenv('DATE_FORMAT')
 
-# from config import DATE_FORMAT, DB_PATH
+DB_PATH = os.getenv('DB_PATH')
+
+
 
 db = SqliteDatabase(DB_PATH)
 

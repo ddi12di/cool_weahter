@@ -42,10 +42,10 @@ def handle_start(message: Message) -> None:
 def handle_cur_city(message: Message) -> None:
     if message.text.isalpha():
 
-        bot.send_message(message.from_user.id,'Укажите ваш текущий город ')
+        bot.send_message(message.from_user.id,'Укажите, в каком городе показать погоду ')
         bot.set_state(message.from_user.id, UserInfo.city, message.chat.id)
         with bot.retrieve_data(message.from_user.id, message.chat.id) as data:
-            data['name'] = message.text
+            data['name'] = message.text.capitalize()
 
     else:
         bot.send_message(message.from_user.id, 'Имя может содеражать толко буквы')
@@ -55,20 +55,23 @@ def handle_cur_city(message: Message) -> None:
 def get_name(message: Message) -> None:
     if message.text.isalpha():
         with bot.retrieve_data(message.from_user.id, message.chat.id) as data:
-            city_id = search_id(message.text)
+            cap = message.text.capitalize()
+            city_id = search_id(cap)
 
             if city_id is None:
                 bot.send_message(message.from_user.id, 'Попробуй еще раз, город не найден ')
             else:
-                data['city'] = search_id(message.text)
+                data['city'] = search_id(cap)
                 text= (
-                    f'Повелитель {data["name"]}\n ' \
-                    f'Ваш текущий город - {Weather(city_id).city}\n' \
-                    f'  На данный момент :\n'
-                    f'   Температура в вашем городе - {Weather(city_id).temp}\n '\
-                    f'   Ощущается температура - {Weather(city_id).feels_like}\n '\
-                    f'   И для самых чувствительный-ДАВЛЕНИЕ- {Weather(city_id).pressure}\n '
-                       )
+                    f'Уважаемый(ая) {data["name"]}\n ' \
+                    f'В городе - {Weather(city_id).city}\n' \
+                    f'   Температура: - {Weather(city_id).temp}\n '\
+                    f'   Ощущается температура: - {Weather(city_id).feels_like}\n '\
+                    f'   Давление- {Weather(city_id).pressure}\n ' \
+                    f'   Поменять Ваше имя введите - "\start"\n ' \
+                    f'   Узнать температуру в другом городе - "введите название города"\n '
+ \
+                    )
                 req = Request.create(
                     username = message.from_user.username,
                     firstname = message.from_user.first_name,
@@ -87,20 +90,6 @@ def get_name(message: Message) -> None:
     else:
         bot.send_message(message.from_user.id, 'Город может содеражать толко буквы')
 
-
-
-
-
-
-
-@bot.message_handler(state = "*", commands=['weather_current_city'])
-def handle_cur_city(message: Message) -> None:
-    bot.send_message(message.from_user.id,'Тут будет текущая температура в установленном городе и вывод ее ')
-
-
-@bot.message_handler(state = "*", commands=['search_city'])
-def handle_cur_city(message: Message) -> None:
-    bot.send_message(message.from_user.id,'Поиск города и температуры !Нужно ввести город и ')
 
 
 

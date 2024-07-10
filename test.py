@@ -1,0 +1,3 @@
+s = 'asdSDAdsf'.
+
+print(s)
